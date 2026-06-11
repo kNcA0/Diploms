@@ -8,10 +8,6 @@ namespace SilaLesaWpfApp.View.Window
 {
     public partial class LoginWindow : System.Windows.Window
     {
-        public static int CurrentUserID { get; set; }
-        public static string CurrentUsername { get; set; }
-        public static string CurrentRole { get; set; }
-
         public LoginWindow()
         {
             InitializeComponent();
@@ -20,8 +16,7 @@ namespace SilaLesaWpfApp.View.Window
 
         private void LoadRoles()
         {
-            DataTable dt = DatabaseHelper.ExecuteQuery("SELECT RoleID, RoleName FROM Roles");
-            cmbRole.ItemsSource = dt.DefaultView;
+            cmbRole.ItemsSource = App.context.Roles;
         }
 
         private void btnLogin_Click(object sender, RoutedEventArgs e)
@@ -36,24 +31,11 @@ namespace SilaLesaWpfApp.View.Window
                 return;
             }
 
-            DataTable dt = DatabaseHelper.ExecuteQuery(
-                "SELECT u.UserID, u.Username, r.RoleName FROM AppUsers u " +
-                "JOIN Roles r ON u.RoleID = r.RoleID " +
-                "WHERE u.Username = @login AND u.PasswordHash = @password AND u.IsActive = 1",
-                new SqlParameter("@login", login),
-                new SqlParameter("@password", password));
-
-            if (dt.Rows.Count > 0)
-            {
-                CurrentUserID = Convert.ToInt32(dt.Rows[0]["UserID"]);
-                CurrentUsername = dt.Rows[0]["Username"].ToString();
-                CurrentRole = dt.Rows[0]["RoleName"].ToString();
-
                 // Проверка выбранной роли
                 if (cmbRole.SelectedValue != null)
                 {
                     string selectedRole = ((DataRowView)cmbRole.SelectedItem)["RoleName"].ToString();
-                    if (selectedRole != CurrentRole)
+                    if (selectedRole != App.currentUser.Roles.RoleName)
                     {
                         txtError.Text = "Выбранная роль не соответствует вашей учетной записи";
                         txtError.Visibility = Visibility.Visible;
@@ -62,14 +44,9 @@ namespace SilaLesaWpfApp.View.Window
                 }
 
                 txtError.Visibility = Visibility.Collapsed;
-                OpenRoleWindow(CurrentRole);
+                OpenRoleWindow(App.currentUser.Roles.RoleName);
                 this.Close();
-            }
-            else
-            {
-                txtError.Text = "Неверный логин или пароль";
-                txtError.Visibility = Visibility.Visible;
-            }
+            
         }
 
         private void OpenRoleWindow(string role)
