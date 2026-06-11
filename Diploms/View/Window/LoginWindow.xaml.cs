@@ -16,7 +16,9 @@ namespace SilaLesaWpfApp.View.Window
 
         private void LoadRoles()
         {
-            cmbRole.ItemsSource = App.context.Roles;
+            cmbRole.ItemsSource = App.context.Roles.ToList();
+            cmbRole.DisplayMemberPath = "RoleName";
+            cmbRole.SelectedValuePath = "RoleID";
         }
 
         private void btnLogin_Click(object sender, RoutedEventArgs e)
@@ -30,23 +32,30 @@ namespace SilaLesaWpfApp.View.Window
                 txtError.Visibility = Visibility.Visible;
                 return;
             }
-
-                // Проверка выбранной роли
-                if (cmbRole.SelectedValue != null)
+            var user = App.context.AppUsers.FirstOrDefault(u => u.Username == login && u.PasswordHash == password);
+            if (user == null)
+            {
+                txtError.Text = "Неверный логин или пароль";
+                txtError.Visibility = Visibility.Visible;
+                return;
+            }
+            if (cmbRole.SelectedValue != null)
+            {
+                int selectedRoleID = (int)cmbRole.SelectedValue;
+                if (user.RoleID != selectedRoleID)
                 {
-                    string selectedRole = ((DataRowView)cmbRole.SelectedItem)["RoleName"].ToString();
-                    if (selectedRole != App.currentUser.Roles.RoleName)
-                    {
-                        txtError.Text = "Выбранная роль не соответствует вашей учетной записи";
-                        txtError.Visibility = Visibility.Visible;
-                        return;
-                    }
+                    txtError.Text = "Выбранная роль не соответствует вашей учетной записи";
+                    txtError.Visibility = Visibility.Visible;
+                    return;
                 }
+            }
 
-                txtError.Visibility = Visibility.Collapsed;
-                OpenRoleWindow(App.currentUser.Roles.RoleName);
-                this.Close();
-            
+            App.currentUser = user;
+            txtError.Visibility = Visibility.Collapsed;
+            string roleName = App.context.Roles.Find(user.RoleID).RoleName;
+            OpenRoleWindow(roleName);
+            Close();
+
         }
 
         private void OpenRoleWindow(string role)
