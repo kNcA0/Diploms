@@ -63,7 +63,10 @@ namespace SilaLesaWpfApp.View.Window
             { MessageBox.Show("Заполните все поля"); return; }
             App.context.AppUsers.Add(new AppUsers { Username = txtNewLogin.Text.Trim(), PasswordHash = txtNewPassword.Password, RoleID = (int)cmbNewUserRole.SelectedValue, IsActive = true, CreatedAt = DateTime.Now.Date });
             App.context.SaveChanges();
-            txtNewLogin.Clear(); txtNewPassword.Clear(); LoadUsers();
+            txtNewLogin.Clear();
+            txtNewPassword.Clear();
+            LoadUsers();
+            dgUsers.SelectedItem = null;
             MessageBox.Show("Пользователь добавлен");
         }
 
@@ -75,7 +78,9 @@ namespace SilaLesaWpfApp.View.Window
             if (selectedUserID == 0 || cmbChangeRole.SelectedValue == null) { MessageBox.Show("Выберите пользователя и роль"); return; }
             var user = App.context.AppUsers.Find(selectedUserID);
             if (user != null) user.RoleID = (int)cmbChangeRole.SelectedValue;
-            App.context.SaveChanges(); LoadUsers();
+            App.context.SaveChanges();
+            LoadUsers();
+            dgUsers.SelectedItem = null;
             MessageBox.Show("Роль изменена");
         }
 
@@ -84,7 +89,8 @@ namespace SilaLesaWpfApp.View.Window
             if (selectedUserID == 0) { MessageBox.Show("Выберите пользователя"); return; }
             var user = App.context.AppUsers.Find(selectedUserID);
             if (user != null) user.IsActive = !user.IsActive;
-            App.context.SaveChanges(); LoadUsers();
+            App.context.SaveChanges();
+            LoadUsers();
             MessageBox.Show("Статус изменен");
         }
 
@@ -94,7 +100,9 @@ namespace SilaLesaWpfApp.View.Window
             if (MessageBox.Show("Удалить пользователя?", "Подтверждение", MessageBoxButton.YesNo) != MessageBoxResult.Yes) return;
             var user = App.context.AppUsers.Find(selectedUserID);
             if (user != null) App.context.AppUsers.Remove(user);
-            App.context.SaveChanges(); LoadUsers();
+            App.context.SaveChanges();
+            LoadUsers();
+            dgUsers.SelectedItem = null;
             MessageBox.Show("Пользователь удален");
         }
 
@@ -114,7 +122,10 @@ namespace SilaLesaWpfApp.View.Window
             if (string.IsNullOrEmpty(txtCustomerName.Text) || string.IsNullOrEmpty(txtCustomerPhone.Text)) { MessageBox.Show("Введите ФИО и телефон"); return; }
             App.context.Customers.Add(new Customers { FullName = txtCustomerName.Text.Trim(), Phone = txtCustomerPhone.Text.Trim(), Email = txtCustomerEmail.Text.Trim() });
             App.context.SaveChanges();
-            ClearCustomerFields(); LoadCustomers(); LoadComboBoxes();
+            ClearCustomerFields();
+            LoadCustomers();
+            LoadComboBoxes();
+            dgCustomers.SelectedItem = null;
             MessageBox.Show("Клиент добавлен");
         }
 
@@ -124,7 +135,10 @@ namespace SilaLesaWpfApp.View.Window
             var c = App.context.Customers.Find(selectedCustomerID);
             if (c != null) { c.FullName = txtCustomerName.Text.Trim(); c.Phone = txtCustomerPhone.Text.Trim(); c.Email = txtCustomerEmail.Text.Trim(); }
             App.context.SaveChanges();
-            ClearCustomerFields(); LoadCustomers(); LoadComboBoxes();
+            ClearCustomerFields();
+            LoadCustomers();
+            LoadComboBoxes();
+            dgCustomers.SelectedItem = null;
             MessageBox.Show("Клиент обновлен");
         }
 
@@ -135,11 +149,20 @@ namespace SilaLesaWpfApp.View.Window
             var c = App.context.Customers.Find(selectedCustomerID);
             if (c != null) App.context.Customers.Remove(c);
             App.context.SaveChanges();
-            ClearCustomerFields(); LoadCustomers(); LoadComboBoxes();
+            ClearCustomerFields();
+            LoadCustomers();
+            LoadComboBoxes();
+            dgCustomers.SelectedItem = null;
             MessageBox.Show("Клиент удален");
         }
 
-        private void ClearCustomerFields() { txtCustomerName.Clear(); txtCustomerPhone.Clear(); txtCustomerEmail.Clear(); selectedCustomerID = 0; }
+        private void ClearCustomerFields()
+        { 
+            txtCustomerName.Clear();
+            txtCustomerPhone.Clear();
+            txtCustomerEmail.Clear();
+            selectedCustomerID = 0;
+        }
 
         // Sites
         private void dgSites_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -158,7 +181,10 @@ namespace SilaLesaWpfApp.View.Window
             if (string.IsNullOrEmpty(txtSiteCode.Text) || string.IsNullOrEmpty(txtSiteName.Text)) { MessageBox.Show("Введите код и название"); return; }
             App.context.Sites.Add(new Sites { SiteCode = txtSiteCode.Text.Trim(), SiteName = txtSiteName.Text.Trim(), SiteType = txtSiteType.Text.Trim(), Capacity = int.Parse(txtSiteCapacity.Text), PricePerNight = decimal.Parse(txtSitePrice.Text), IsActive = true });
             App.context.SaveChanges();
-            ClearSiteFields(); LoadSites(); LoadComboBoxes();
+            ClearSiteFields();
+            LoadSites();
+            LoadComboBoxes();
+            dgSites.SelectedItem = null;
             MessageBox.Show("Место добавлено");
         }
 
@@ -168,7 +194,10 @@ namespace SilaLesaWpfApp.View.Window
             var site = App.context.Sites.Find(selectedSiteID);
             if (site != null) { site.SiteCode = txtSiteCode.Text.Trim(); site.SiteName = txtSiteName.Text.Trim(); site.SiteType = txtSiteType.Text.Trim(); site.Capacity = int.Parse(txtSiteCapacity.Text); site.PricePerNight = decimal.Parse(txtSitePrice.Text); }
             App.context.SaveChanges();
-            ClearSiteFields(); LoadSites(); LoadComboBoxes();
+            ClearSiteFields();
+            LoadSites();
+            LoadComboBoxes();
+            dgSites.SelectedItem = null;
             MessageBox.Show("Место обновлено");
         }
 
@@ -179,11 +208,22 @@ namespace SilaLesaWpfApp.View.Window
             var site = App.context.Sites.Find(selectedSiteID);
             if (site != null) site.IsActive = false;
             App.context.SaveChanges();
-            ClearSiteFields(); LoadSites(); LoadComboBoxes();
+            ClearSiteFields();
+            LoadSites();
+            LoadComboBoxes();
+            dgSites.SelectedItem = null;
             MessageBox.Show("Место удалено");
         }
 
-        private void ClearSiteFields() { txtSiteCode.Clear(); txtSiteName.Clear(); txtSiteType.Clear(); txtSiteCapacity.Clear(); txtSitePrice.Clear(); selectedSiteID = 0; }
+        private void ClearSiteFields()
+        {
+            txtSiteCode.Clear();
+            txtSiteName.Clear();
+            txtSiteType.Clear();
+            txtSiteCapacity.Clear();
+            txtSitePrice.Clear();
+            selectedSiteID = 0;
+        }
 
         // Services
         private void dgServices_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -201,7 +241,9 @@ namespace SilaLesaWpfApp.View.Window
             if (string.IsNullOrEmpty(txtServiceName.Text)) { MessageBox.Show("Введите название услуги"); return; }
             App.context.Services.Add(new Services { ServiceName = txtServiceName.Text.Trim(), ServiceType = txtServiceType.Text.Trim(), PricePerDay = decimal.Parse(txtServicePrice.Text), IsActive = true });
             App.context.SaveChanges();
-            ClearServiceFields(); LoadServices();
+            ClearServiceFields();
+            LoadServices();
+            dgServices.SelectedItem = null;
             MessageBox.Show("Услуга добавлена");
         }
 
@@ -211,7 +253,9 @@ namespace SilaLesaWpfApp.View.Window
             var svc = App.context.Services.Find(selectedServiceID);
             if (svc != null) { svc.ServiceName = txtServiceName.Text.Trim(); svc.ServiceType = txtServiceType.Text.Trim(); svc.PricePerDay = decimal.Parse(txtServicePrice.Text); }
             App.context.SaveChanges();
-            ClearServiceFields(); LoadServices();
+            ClearServiceFields();
+            LoadServices();
+            dgServices.SelectedItem = null;
             MessageBox.Show("Услуга обновлена");
         }
 
@@ -222,11 +266,19 @@ namespace SilaLesaWpfApp.View.Window
             var svc = App.context.Services.Find(selectedServiceID);
             if (svc != null) svc.IsActive = false;
             App.context.SaveChanges();
-            ClearServiceFields(); LoadServices();
+            ClearServiceFields();
+            LoadServices();
+            dgServices.SelectedItem = null;
             MessageBox.Show("Услуга удалена");
         }
 
-        private void ClearServiceFields() { txtServiceName.Clear(); txtServiceType.Clear(); txtServicePrice.Clear(); selectedServiceID = 0; }
+        private void ClearServiceFields()
+        {
+            txtServiceName.Clear();
+            txtServiceType.Clear();
+            txtServicePrice.Clear();
+            selectedServiceID = 0;
+        }
 
         // Bookings
         private void dgBookings_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -248,6 +300,7 @@ namespace SilaLesaWpfApp.View.Window
             if (b != null) b.Status = ((ComboBoxItem)cmbBookingStatus.SelectedItem).Content.ToString();
             App.context.SaveChanges();
             LoadBookings();
+            dgBookings.SelectedItem = null;
             MessageBox.Show("Статус обновлен");
         }
 
@@ -271,6 +324,7 @@ namespace SilaLesaWpfApp.View.Window
 
             App.context.SaveChanges();
             LoadBookings();
+            dgBookings.SelectedItem = null;
             MessageBox.Show("Бронирование удалено");
         }
 
