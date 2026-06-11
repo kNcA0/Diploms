@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Policy;
 using System.Windows;
 using System.Windows.Controls;
+using System.Data.Entity;
 
 namespace SilaLesaWpfApp.View.Window
 {
@@ -254,8 +255,20 @@ namespace SilaLesaWpfApp.View.Window
         {
             if (selectedBookingID == 0) { MessageBox.Show("Выберите бронирование"); return; }
             if (MessageBox.Show("Удалить бронирование?", "Подтверждение", MessageBoxButton.YesNo) != MessageBoxResult.Yes) return;
+
             var b = App.context.Bookings.Include("BookingServices").FirstOrDefault(x => x.BookingID == selectedBookingID);
-            if (b != null) { App.context.BookingServices.RemoveRange(b.BookingServices); App.context.Bookings.Remove(b); }
+
+            if (b != null)
+            {
+                // Удаляем связанные услуги через цикл (вместо RemoveRange)
+                foreach (var bs in b.BookingServices.ToList())
+                {
+                    App.context.BookingServices.Remove(bs);
+                }
+
+                App.context.Bookings.Remove(b);
+            }
+
             App.context.SaveChanges();
             LoadBookings();
             MessageBox.Show("Бронирование удалено");
