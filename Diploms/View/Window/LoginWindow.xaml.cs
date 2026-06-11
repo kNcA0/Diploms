@@ -19,6 +19,7 @@ namespace SilaLesaWpfApp.View.Window
             cmbRole.ItemsSource = App.context.Roles.ToList();
             cmbRole.DisplayMemberPath = "RoleName";
             cmbRole.SelectedValuePath = "RoleID";
+            cmbRole.SelectedIndex = 0;
         }
 
         private void btnLogin_Click(object sender, RoutedEventArgs e)
