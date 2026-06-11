@@ -63,7 +63,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="DatabaseHelper.cs" />
     <Compile Include="Model\AppUsers.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
