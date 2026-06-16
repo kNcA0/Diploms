@@ -33,6 +33,5 @@ namespace Diploms.Model
         public DbSet<Roles> Roles { get; set; }
         public DbSet<Services> Services { get; set; }
         public DbSet<Sites> Sites { get; set; }
-        public DbSet<sysdiagrams> sysdiagrams { get; set; }
     }
 }

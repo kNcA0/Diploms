@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="b01452f7863c49608700ca48077f8043" Name="Diagram1">
+      <Diagram DiagramId="625a42728bf7437f87cfb120ee381cf9" Name="Diagram1">
         <EntityTypeShape EntityType="CampingBookingDBModel.AppUsers" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="CampingBookingDBModel.Bookings" Width="1.5" PointX="3" PointY="4.125" IsExpanded="true" />
         <EntityTypeShape EntityType="CampingBookingDBModel.BookingServices" Width="1.5" PointX="8.25" PointY="4.5" IsExpanded="true" />
@@ -13,7 +13,6 @@
         <EntityTypeShape EntityType="CampingBookingDBModel.Roles" Width="1.5" PointX="1.5" PointY="9.375" IsExpanded="true" />
         <EntityTypeShape EntityType="CampingBookingDBModel.Services" Width="1.5" PointX="6" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="CampingBookingDBModel.Sites" Width="1.5" PointX="0.75" PointY="12.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="CampingBookingDBModel.sysdiagrams" Width="1.5" PointX="5.75" PointY="8.125" IsExpanded="true" />
         <AssociationConnector Association="CampingBookingDBModel.FK_AppUsers_Roles" ManuallyRouted="false" />
         <AssociationConnector Association="CampingBookingDBModel.FK_Bookings_AppUsers" ManuallyRouted="false" />
         <AssociationConnector Association="CampingBookingDBModel.FK_Bookings_Customers" ManuallyRouted="false" />

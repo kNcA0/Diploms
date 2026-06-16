@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Data.Entity;
 using System.Linq;
+using Diploms.Model;
 
 namespace SilaLesaWpfApp.View.Window
 {
@@ -55,31 +56,25 @@ namespace SilaLesaWpfApp.View.Window
 
             App.currentUser = user;
             txtError.Visibility = Visibility.Collapsed;
-            string roleName = App.context.Roles.Find(user.RoleID).RoleName;
-            OpenRoleWindow(roleName);
+            Roles role = cmbRole.SelectedItem as Roles;
+            if (role.RoleID == 1)
+            {
+                AdminWindow adminWindow = new AdminWindow();
+                adminWindow.Show();
+            }
+            else if (role.RoleID == 2)
+            {
+                ModeratorWindow moderatorWindow = new ModeratorWindow();
+                moderatorWindow.Show();
+            }
+            else
+            {
+                UserWindow userWindow = new UserWindow();
+                userWindow.Show();
+            }
+
             Close();
 
-        }
-
-        private void OpenRoleWindow(string role)
-        {
-            System.Windows.Window window = null;
-            switch (role)
-            {
-                case "admin":
-                    window = new AdminWindow();
-                    break;
-                case "moderator":
-                    window = new ModeratorWindow();
-                    break;
-                case "user":
-                    window = new UserWindow();
-                    break;
-                default:
-                    MessageBox.Show("Неизвестная роль");
-                    return;
-            }
-            window.Show();
         }
     }
 }
